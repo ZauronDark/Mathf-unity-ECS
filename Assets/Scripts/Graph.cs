@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.UI;
 
@@ -101,22 +103,23 @@ public class Graph : MonoBehaviour
         magZSine.value = 1f;
 
         //instantiating 10000 (ten thousand) gameOjects into array
-        holder = new Transform[100];
         //pointsObj = new Transform[10000];
         holder = new TransformAccessArray(0, -1);
+        points = new TransformAccessArray(0, -1);
 
         for (int i = 0; i < 100; i++)
         {
-            holder[i] = Instantiate(empty);
+            holder.Add(Instantiate(empty));
         }
 
         for (int i = 0; i < 10000; i++)
         {
-            points[i] = Instantiate(pointPrefab);
-            points[i].SetParent(holder[i / 100], false);
+            temp = Instantiate(pointPrefab);
+            temp.SetParent(holder[i / 100], false);
+            points.Add(temp);
         }
-        transforms = new TransformAccessArray(points, -1);
-
+        
+        //some prejob calculations
         steps = 2f / resRange.value;
         baseData.mode = dropdown.value;             //set mode about how to draw graph
         baseData.res = (int)resRange.value;               //set resolution
