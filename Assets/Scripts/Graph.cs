@@ -1,17 +1,18 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine.Jobs;
-using Unity.Collections;
-using System.Collections.Generic;
-
+using UnityEngine.UI;
 
 public class Graph : MonoBehaviour
 {
     //ref var
     public Transform pointPrefab;
     public Transform empty;
-    [Space]
+    public Dropdown dropdown;
+    public Text[] texts;
+
+    //public properties
     public Slider resRange;
     public Slider timeXMulti;
     public Slider timeZMulti;
@@ -19,31 +20,21 @@ public class Graph : MonoBehaviour
     public Slider freqZSine;
     public Slider magXSine;
     public Slider magZSine;
-    public Dropdown dropdown;
-    [Space]
-    public Text resNum;
-    public Text freq1Num;
-    public Text freq2Num;
-    public Text mag1Num;
-    public Text mag2Num;
-    public Text time1Num;
-    public Text time2Num;
-    public Text fpsNum;
 
     //private var
     private JobHandle xLoopHandle;
-    private XLoop xLoop;
     private JobHandle gOHandle;
+    private XLoop xLoop;
     private GOPos gOpos;
-    private TransformAccessArray transforms;
-    private NativeArray<Vector3> pos;
-    private Transform[] points;
-    private Transform[] holder;
+    private TransformAccessArray points;
+    private NativeArray<float3> pos;
+    private TransformAccessArray holder;
+   // private Transform[] pointsObj;
+    private BaseData baseData;
+    private SinXData sinX;
+    private SinZData sinZ;
+    private FpsData fpsData;
     private float steps = 0f;
-    private JobData jobData;
-    private float fpsSum;
-    private bool fpsClock = false;
-    private int fpscount;
     private readonly string[] stringsFrom00To99 = {
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
         "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
@@ -59,6 +50,7 @@ public class Graph : MonoBehaviour
 
     private void Awake()
     {
+        Transform temp;
         Input.backButtonLeavesApp = true;
         DontDestroyOnLoad(gameObject);
         //setup Dropdown
@@ -109,8 +101,10 @@ public class Graph : MonoBehaviour
         magZSine.value = 1f;
 
         //instantiating 10000 (ten thousand) gameOjects into array
-        points = new Transform[10000];
         holder = new Transform[100];
+        //pointsObj = new Transform[10000];
+        holder = new TransformAccessArray(0, -1);
+
         for (int i = 0; i < 100; i++)
         {
             holder[i] = Instantiate(empty);
@@ -123,20 +117,19 @@ public class Graph : MonoBehaviour
         }
         transforms = new TransformAccessArray(points, -1);
 
-        //some preloop calculations
         steps = 2f / resRange.value;
-        jobData.modeJ = dropdown.value;                     //set mode about how to draw graph
-        jobData.resJ = (int)resRange.value;                 //set resolution
-        jobData.posBaseJ = (0.5f * steps) - 1f;             //helps in calculating postion of each item
-        jobData.stepsJ = steps;                             //helps in calculating postion and scalling of all items based on resolution
-        jobData.piRefJ = Mathf.PI;                           //just referancing PI constent
-        jobData.timeXSineJ = timeXMulti.value * Time.time;  //Sine wave Speed on X axis
-        jobData.timeZSineJ = timeZMulti.value * Time.time;  //Sine wave Speed on Z axis
-        jobData.freqXSineJ = freqXSine.value;               //Sine wave Frequency on X axis
-        jobData.freqZSineJ = freqZSine.value;               //Sine wave Frequency on Z axis
-        jobData.magXSineJ = magXSine.value;                 //Sine wave Magnitude on X axix
-        jobData.magZSineJ = magZSine.value;                 //Sine wave Magnitude on Z axix
-        pos = new NativeArray<Vector3>(10000, Allocator.TempJob);
+        baseData.mode = dropdown.value;             //set mode about how to draw graph
+        baseData.res = (int)resRange.value;               //set resolution
+        baseData.posBase = (0.5f * steps) - 1f;     //helps in calculating postion of each item
+        baseData.steps = steps;                     //helps in calculating postion and scalling of all items based on resolution
+        sinX.pi = Mathf.PI;                         //just referancing PI constent
+        sinX.timeXSine = timeXMulti.value * Time.time;    //Sine wave Speed on X axis
+        sinX.freqXSine = freqXSine.value;                 //Sine wave Frequency on X axis
+        sinX.magXSine = magXSine.value;                   //Sine wave Magnitude on X axix
+        sinZ.timeZSine = timeZMulti.value * Time.time;    //Sine wave Speed on Z axis
+        sinZ.freqZSine = freqZSine.value;                 //Sine wave Frequency on Z axis
+        sinZ.magZSine = magZSine.value;                   //Sine wave Magnitude on Z axix
+        pos = new NativeArray<float3>(10000, Allocator.TempJob);
     }
 
     private void Update()
@@ -146,7 +139,9 @@ public class Graph : MonoBehaviour
         xLoop = new XLoop()
         {
             posJ = pos,                                 //position Shared Native Array
-            jobDataJ = jobData                          //passing last frame calculated Job variable Data
+            baseDataj = baseData,                          //passing last frame calculated Job variable Data
+            sinXj = sinX,
+            sinZj = sinZ,
         };
         xLoopHandle = xLoop.Schedule((int)(resRange.value * resRange.value), 64);
         xLoopHandle.Complete();
@@ -154,25 +149,25 @@ public class Graph : MonoBehaviour
         //setting up Transform of each Gameobjects AFTER XLoop Job comepleted 
         gOpos = new GOPos()
         {
-            scaleJ = Vector3.one * steps,               //Size of all Cubes
+            scaleJ = new float3(1f, 1f, 1f) * steps,               //Size of all Cubes
             pos = pos                                   //position Shared Native Array
         };
-        gOHandle = gOpos.Schedule(transforms, xLoopHandle);
+        gOHandle = gOpos.Schedule(points, xLoopHandle);
 
         JobHandle.ScheduleBatchedJobs();
 
-        fpscount++;
-        fpsSum += 1f / Time.unscaledDeltaTime;
-        if ((int)Time.time % 2 == 0 && fpsClock)
+        fpsData.fpscount++;
+        fpsData.fpsSum += 1f / Time.unscaledDeltaTime;
+        if ((int)Time.time % 2 == 0 && fpsData.fpsClock)
         {
-            fpsClock = false;
-            fpsNum.text = stringsFrom00To99[Mathf.Clamp((int)(fpsSum / fpscount), 0, 99)];
-            fpscount = 0;
-            fpsSum = 0f;
+            fpsData.fpsClock = false;
+            fpsData.fpsAvg = math.clamp((int)(fpsData.fpsSum / fpsData.fpscount), 0, 99);
+            fpsData.fpscount = 0;
+            fpsData.fpsSum = 0f;
         }
-        else if ((int)Time.time % 2 != 0 && !fpsClock)
+        else if ((int)Time.time % 2 != 0 && !fpsData.fpsClock)
         {
-            fpsClock = true;
+            fpsData.fpsClock = true;
         }
     }
 
@@ -180,36 +175,37 @@ public class Graph : MonoBehaviour
     {
         //some preloop calculations for next frame
         steps = 2f / resRange.value;
-        jobData.modeJ = dropdown.value;                     //set mode about how to draw graph
-        jobData.resJ = (int)resRange.value;                 //set resolution
-        jobData.posBaseJ = (0.5f * steps) - 1f;             //helps in calculating postion of each item
-        jobData.stepsJ = steps;                             //helps in calculating postion and scalling of all items based on resolution
-        jobData.timeXSineJ = timeXMulti.value * Time.time;  //Sine wave Speed on X axis
-        jobData.timeZSineJ = timeZMulti.value * Time.time;  //Sine wave Speed on Z axis
-        jobData.freqXSineJ = freqXSine.value;               //Sine wave Frequency on X axis
-        jobData.freqZSineJ = freqZSine.value;               //Sine wave Frequency on Z axis
-        jobData.magXSineJ = magXSine.value;                 //Sine wave Magnitude on X axix
-        jobData.magZSineJ = magZSine.value;                 //Sine wave Magnitude on Z axix
+        baseData.mode = dropdown.value;             //set mode about how to draw graph
+        baseData.res = (int)resRange.value;               //set resolution
+        baseData.posBase = (0.5f * steps) - 1f;     //helps in calculating postion of each item
+        baseData.steps = steps;                     //helps in calculating postion and scalling of all items based on resolution
+        sinX.timeXSine = timeXMulti.value * Time.time;    //Sine wave Speed on X axis
+        sinX.freqXSine = freqXSine.value;                 //Sine wave Frequency on X axis
+        sinX.magXSine = magXSine.value;                   //Sine wave Magnitude on X axix
+        sinZ.timeZSine = timeZMulti.value * Time.time;    //Sine wave Speed on Z axis
+        sinZ.freqZSine = freqZSine.value;                 //Sine wave Frequency on Z axis
+        sinZ.magZSine = magZSine.value;                   //Sine wave Magnitude on Z axix
 
-        resNum.text = resRange.value.ToString("N2");
-        freq1Num.text = freqXSine.value.ToString("N2");
-        freq2Num.text = freqZSine.value.ToString("N2");
-        mag1Num.text = magXSine.value.ToString("N2");
-        mag2Num.text = magZSine.value.ToString("N2");
-        time1Num.text = timeXMulti.value.ToString("N2");
-        time2Num.text = timeZMulti.value.ToString("N2");
-        
+        texts[0].text = resRange.value.ToString("N2");
+        texts[1].text = freqXSine.value.ToString("N2");
+        texts[2].text = freqZSine.value.ToString("N2");
+        texts[3].text = magXSine.value.ToString("N2");
+        texts[4].text = magZSine.value.ToString("N2");
+        texts[5].text = timeXMulti.value.ToString("N2");
+        texts[6].text = timeZMulti.value.ToString("N2");
+        texts[7].text = stringsFrom00To99[fpsData.fpsAvg];
 
         gOHandle.Complete();
         pos.Dispose();
-        pos = new NativeArray<Vector3>(10000, Allocator.TempJob);
+        pos = new NativeArray<float3>(10000, Allocator.TempJob);
     }
 
     //when this gameObjec Disables/Inactive
     private void OnDisable()
     {
         gOHandle.Complete();
-        transforms.Dispose();
+        points.Dispose();
+        holder.Dispose();
         pos.Dispose();
     }
 }
