@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -277,10 +277,33 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options: []
+    m_Options:
+    - m_Text: Default
+      m_Image: {fileID: 0}
+    - m_Text: Wave
+      m_Image: {fileID: 0}
+    - m_Text: Ripple
+      m_Image: {fileID: 0}
+    - m_Text: Cylinder
+      m_Image: {fileID: 0}
+    - m_Text: Shpear
+      m_Image: {fileID: 0}
+    - m_Text: Torus
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: set_Mode
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Dropdown+DropdownEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &137204367
@@ -812,7 +835,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_FreqXSine
         m_Mode: 0
         m_Arguments:
@@ -1208,13 +1231,13 @@ MonoBehaviour:
   m_HandleRect: {fileID: 596758627}
   m_Direction: 0
   m_MinValue: 10
-  m_MaxValue: 100
+  m_MaxValue: 200
   m_WholeNumbers: 1
   m_Value: 50
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_ResRange
         m_Mode: 0
         m_Arguments:
@@ -1826,7 +1849,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_FreqZSine
         m_Mode: 0
         m_Arguments:
@@ -2310,7 +2333,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_MagZSine
         m_Mode: 0
         m_Arguments:
@@ -2876,7 +2899,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Default
 --- !u!222 &972119920
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3933,7 +3956,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_TimeZMulti
         m_Mode: 0
         m_Arguments:
@@ -4034,7 +4057,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_MagXSine
         m_Mode: 0
         m_Arguments:
@@ -4909,7 +4932,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2096090925}
+      - m_Target: {fileID: 0}
         m_MethodName: set_TimeXMulti
         m_Mode: 0
         m_Arguments:
@@ -5307,6 +5330,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2096090924}
+  - component: {fileID: 2096090927}
+  - component: {fileID: 2096090926}
   - component: {fileID: 2096090925}
   m_Layer: 0
   m_Name: GameObject
@@ -5338,13 +5363,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2096090923}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deb78d0be2d89cc4b9b55c7d998f371e, type: 3}
+  m_Script: {fileID: 11500000, guid: f8914a6918cd1f14aa9e290dd3dc69c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointPrefab: {fileID: 4585662561562062, guid: c495422d96a148142b874f19c7fdb144,
-    type: 3}
-  empty: {fileID: 1591499970329287435, guid: 2ef7075d9eb71014592afa8dcfb64159, type: 3}
-  dropdown: {fileID: 137204366}
   texts:
   - {fileID: 230565558}
   - {fileID: 432456061}
@@ -5354,13 +5375,36 @@ MonoBehaviour:
   - {fileID: 2140879050}
   - {fileID: 1411274041}
   - {fileID: 22079968}
-  resRange: {fileID: 444486341}
-  timeXMulti: {fileID: 1908943647}
-  timeZMulti: {fileID: 1504672198}
-  freqXSine: {fileID: 248435418}
-  freqZSine: {fileID: 699847907}
-  magXSine: {fileID: 1506430087}
-  magZSine: {fileID: 795835090}
+--- !u!114 &2096090926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096090923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0fd4427893a4a16ba0c267dfd00217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedData:
+    mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    material: {fileID: 2100000, guid: 9716511c1d0ce344b859dea97ea61130, type: 2}
+    subMesh: 0
+    castShadows: 0
+    receiveShadows: 0
+--- !u!114 &2096090927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096090923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2099465084
 GameObject:
   m_ObjectHideFlags: 0
