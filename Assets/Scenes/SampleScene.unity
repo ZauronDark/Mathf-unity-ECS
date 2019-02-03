@@ -293,7 +293,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_Mode
         m_Mode: 0
         m_Arguments:
@@ -835,7 +835,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_FreqXSine
         m_Mode: 0
         m_Arguments:
@@ -1237,7 +1237,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_ResRange
         m_Mode: 0
         m_Arguments:
@@ -1849,7 +1849,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_FreqZSine
         m_Mode: 0
         m_Arguments:
@@ -2333,7 +2333,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_MagZSine
         m_Mode: 0
         m_Arguments:
@@ -3956,7 +3956,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_TimeZMulti
         m_Mode: 0
         m_Arguments:
@@ -4057,7 +4057,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_MagXSine
         m_Mode: 0
         m_Arguments:
@@ -4932,7 +4932,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2096090925}
         m_MethodName: set_TimeXMulti
         m_Mode: 0
         m_Arguments:
