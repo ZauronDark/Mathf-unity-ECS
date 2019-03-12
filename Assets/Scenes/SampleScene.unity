@@ -5331,8 +5331,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2096090924}
   - component: {fileID: 2096090927}
-  - component: {fileID: 2096090926}
   - component: {fileID: 2096090925}
+  - component: {fileID: 2096090926}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -5391,6 +5391,7 @@ MonoBehaviour:
     mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     material: {fileID: 2100000, guid: 9716511c1d0ce344b859dea97ea61130, type: 2}
     subMesh: 0
+    layer: 0
     castShadows: 0
     receiveShadows: 0
 --- !u!114 &2096090927
