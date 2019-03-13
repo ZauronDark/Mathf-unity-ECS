@@ -9,10 +9,10 @@ using Unity.Transforms;
 // JobComponentSystems can run on worker threads.
 // However, creating and removing Entities can only be done on the main thread to prevent race conditions.
 // The system uses an EntityCommandBuffer to defer tasks that can't be done inside the Job.
-public class HelloSpawnerSystem : JobComponentSystem
+public class SpawnCubeSystem : JobComponentSystem
 {
     // EndSimulationBarrier is used to create a command buffer which will then be played back when that barrier system executes.
-    EndSimulationEntityCommandBuffer m_EntityCommandBufferSystem;
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
 
     protected override void OnCreateManager()
     {
@@ -20,12 +20,12 @@ public class HelloSpawnerSystem : JobComponentSystem
         m_EntityCommandBufferSystem = World.GetOrCreateManager<EndSimulationEntityCommandBufferSystem>();
     }
 
+    [BurstCompile]
     struct SpawnJob : IJobProcessComponentDataWithEntity<SpawnCube, LocalToWorld>
     {
         public EntityCommandBuffer CommandBuffer;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref SpawnCube spawner,
-            [ReadOnly] ref LocalToWorld location)
+        public void Execute(Entity entity, int index, [ReadOnly] ref SpawnCube spawner, [ReadOnly] ref LocalToWorld location)
         {
             for (int x = 0; x < spawner.CountX; x++)
             {
@@ -34,9 +34,8 @@ public class HelloSpawnerSystem : JobComponentSystem
                     Entity instance = CommandBuffer.Instantiate(spawner.Prefab);
 
                     // Place the instantiated in a grid with some noise
-                    var position = math.transform(location.Value,
-                        new float3(x * 1.3F, noise.cnoise(new float2(x, y) * 0.21F) * 2, y * 1.3F));
-                    CommandBuffer.SetComponent(instance, new Position { Value = position });
+                    float3 position = math.transform(location.Value, new float3(x * 1.3F, noise.cnoise(new float2(x, y) * 0.21F) * 2, y * 1.3F));
+                    CommandBuffer.SetComponent(instance, new Translation { Value = position });
                 }
             }
 

@@ -17,7 +17,7 @@ public class JobSystem : JobComponentSystem
     //  ----WaveMode Job----
 
     [BurstCompile]
-    private struct WaveMode : IJobProcessComponentData<Position, Index, Scale>
+    private struct WaveMode : IJobProcessComponentData<Translation, Index, NonUniformScale>
     {
         [ReadOnly] public BaseData baseDataj;
         [ReadOnly] public FreqSin freq;
@@ -27,7 +27,7 @@ public class JobSystem : JobComponentSystem
         [ReadOnly] public float3 scalej;
         public float3 vector;
 
-        public void Execute(ref Position pos, [ReadOnly] ref Index i, ref Scale scale)
+        public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             if (i.index + 1 < baseDataj.res * baseDataj.res)
             {
@@ -48,7 +48,7 @@ public class JobSystem : JobComponentSystem
 
 
     [BurstCompile]
-    private struct RippleMode : IJobProcessComponentData<Position, Index, Scale>
+    private struct RippleMode : IJobProcessComponentData<Translation, Index, NonUniformScale>
     {
         [ReadOnly] public BaseData baseDataj;
         [ReadOnly] public FreqSin freq;
@@ -59,7 +59,7 @@ public class JobSystem : JobComponentSystem
         public float3 vector;
         private float s;
 
-        public void Execute(ref Position pos, [ReadOnly] ref Index i, ref Scale scale)
+        public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             if (i.index + 1 < baseDataj.res * baseDataj.res)
             {
@@ -81,7 +81,7 @@ public class JobSystem : JobComponentSystem
 
 
     [BurstCompile]
-    private struct CylinderMode : IJobProcessComponentData<Position, Index, Scale>
+    private struct CylinderMode : IJobProcessComponentData<Translation, Index, NonUniformScale>
     {
         [ReadOnly] public BaseData baseDataj;
         [ReadOnly] public FreqSin freq;
@@ -94,7 +94,7 @@ public class JobSystem : JobComponentSystem
         private float v;
         private float r;
 
-        public void Execute(ref Position pos, [ReadOnly] ref Index i, ref Scale scale)
+        public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             if (i.index + 1 < baseDataj.res * baseDataj.res)
             {
@@ -116,7 +116,7 @@ public class JobSystem : JobComponentSystem
 
 
     [BurstCompile]
-    private struct SphearMode : IJobProcessComponentData<Position, Index, Scale>
+    private struct SphearMode : IJobProcessComponentData<Translation, Index, NonUniformScale>
     {
         [ReadOnly] public BaseData baseDataj;
         [ReadOnly] public FreqSin freq;
@@ -130,7 +130,7 @@ public class JobSystem : JobComponentSystem
         private float r;
         private float s;
 
-        public void Execute(ref Position pos, [ReadOnly] ref Index i, ref Scale scale)
+        public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             if (i.index + 1 < baseDataj.res * baseDataj.res)
             {
@@ -154,7 +154,7 @@ public class JobSystem : JobComponentSystem
 
 
     [BurstCompile]
-    private struct TorusMode : IJobProcessComponentData<Position, Index, Scale>
+    private struct TorusMode : IJobProcessComponentData<Translation, Index, NonUniformScale>
     {
         [ReadOnly] public BaseData baseDataj;
         [ReadOnly] public FreqSin freq;
@@ -168,7 +168,7 @@ public class JobSystem : JobComponentSystem
         private float r;
         private float s;
 
-        public void Execute(ref Position pos, [ReadOnly] ref Index i, ref Scale scale)
+        public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             if (i.index + 1 < baseDataj.res * baseDataj.res)
             {
@@ -190,11 +190,11 @@ public class JobSystem : JobComponentSystem
 
 
     [BurstCompile]
-    private struct DefaultMode : IJobProcessComponentData<Position, Index, Scale>
+    private struct DefaultMode : IJobProcessComponentData<Translation, Index, NonUniformScale>
     {
         [ReadOnly] public float3 scalej;
         public float3 vector;
-        public void Execute(ref Position pos, [ReadOnly] ref Index i, ref Scale scale)
+        public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             pos.Value = vector;
             scale.Value = scalej; 

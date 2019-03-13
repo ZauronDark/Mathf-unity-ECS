@@ -18,16 +18,16 @@
 //    //  ----initial functions----
 
 
-//   [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+//    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 //    public static void Awake()
 //    {
 //        //create entities
 //        entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
 //        CubeArchetype = entityManager.CreateArchetype(
-//            typeof(Position),
+//            typeof(Translation),
 //            typeof(Index),
-//            typeof(Scale),
+//            typeof(NonUniformScale),
 //            typeof(Rotation)
 //            );
 
@@ -38,7 +38,7 @@
 //    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 //    public static void Start()
 //    {
-//        cubeRenderer = Object.FindObjectOfType<RenderMeshPro>().Value;
+//        cubeRenderer = Object.FindObjectOfType<RenderMeshProxy>().Value;
 //        PopulateCubles();
 //    }
 
@@ -47,9 +47,9 @@
 //        for (int i = 0; i < 40000; i++)
 //        {
 //            cube = entityManager.CreateEntity(CubeArchetype);
-//            entityManager.SetComponentData(cube, new Position { Value = float3.zero });
+//            entityManager.SetComponentData(cube, new Translation { Value = float3.zero });
 //            entityManager.SetComponentData(cube, new Index { index = i });
-//            entityManager.SetComponentData(cube, new Scale { Value = new float3(1f, 1f, 1f) });
+//            entityManager.SetComponentData(cube, new NonUniformScale { Value = new float3(1f, 1f, 1f) });
 //            entityManager.AddSharedComponentData(cube, cubeRenderer);
 //        }
 //    }

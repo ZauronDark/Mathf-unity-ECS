@@ -4,7 +4,7 @@ using Unity.Entities;
 using UnityEngine;
 
 
-public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
+public class SpawnCubeProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
     public GameObject Prefab;
     public int CountX;
@@ -20,7 +20,7 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        var spawnerData = new HelloSpawner
+        SpawnCube spawnCubeData = new SpawnCube
         {
             // The referenced prefab will be converted due to DeclareReferencedPrefabs.
             // So here we simply map the game object to an entity reference to that prefab.
@@ -28,6 +28,6 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
             CountX = CountX,
             CountY = CountY
         };
-        dstManager.AddComponentData(entity, spawnerData);
+        dstManager.AddComponentData(entity, spawnCubeData);
     }
 }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using Unity.Mathematics;
 using Unity.Jobs;
+using Unity.Collections;
 
 public class GameObj : MonoBehaviour
 {
@@ -32,8 +33,7 @@ public class GameObj : MonoBehaviour
 
     //  ----Private Variables----
 
-
-    private FpsData fpsData;
+    
     private readonly string[] stringsFrom00To99 = {
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
         "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
@@ -46,9 +46,12 @@ public class GameObj : MonoBehaviour
         "80", "81", "82", "83", "84", "85", "86", "87", "88", "89",
         "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
     };
-    private FPSJob fpsJob;
-    private JobHandle fpsHandle;
-    
+    private byte fpscount;
+    private byte fpsAvg;
+    private half fpsSum;
+    private bool fpsClock;
+
+
 
     //  ----Init Functions----
 
@@ -78,22 +81,26 @@ public class GameObj : MonoBehaviour
 
     private void Update()
     {
-        fpsJob = new FPSJob
+        fpscount++;
+        fpsSum += math.half(1f / Time.unscaledDeltaTime);
+        if (math.floor(Time.time) % 2 == 0 && fpsClock) //possible break on math.ceil()
         {
-            fpsData = fpsData,
-            time = (byte)Time.time,
-            uTime = Time.unscaledDeltaTime
-        };
-
-        fpsHandle = fpsJob.Schedule();
+            fpsClock = false;
+            fpsAvg = (byte)math.clamp(fpsSum / fpscount, 0, 99);
+            fpscount = 0;
+            fpsSum = math.half(0f);
+        }
+        else if (Time.time % 2 != 0 && !fpsClock)
+        {
+            fpsClock = true;
+        }
     }
 
     //Call updating fuctions
     private void LateUpdate()
     {
         PreLoopCalc();
-        fpsHandle.Complete();
-        if (fpsData.fpsAvg < 5)
+        if (fpsAvg < 5)
         {
             ResRange = 10;
             Debug.Log("fallback resoution");
@@ -126,7 +133,7 @@ public class GameObj : MonoBehaviour
         texts[4].text = magn.z.ToString();
         texts[5].text = TimeXMulti.ToString("N2");
         texts[6].text = TimeZMulti.ToString("N2");
-        texts[7].text = stringsFrom00To99[fpsData.fpsAvg];
+        texts[7].text = stringsFrom00To99[fpsAvg];
     }
 
 
