@@ -5,7 +5,7 @@ public struct BaseData
     public byte mode;
     public byte res;
     public float posBase;
-    public float steps;
+    public float size;
 }
 
 public struct PI
@@ -15,8 +15,8 @@ public struct PI
 
 public struct TimeSin
 {
-    public half x;
-    public half z;
+    public float x;
+    public float z;
 }
 
 public struct FreqSin

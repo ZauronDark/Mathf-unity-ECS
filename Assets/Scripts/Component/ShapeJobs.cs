@@ -5,11 +5,6 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-public struct Index : IComponentData
-{
-    public int index;
-}
-
 public class JobSystem : JobComponentSystem
 {
 
@@ -29,10 +24,10 @@ public class JobSystem : JobComponentSystem
 
         public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
-            if (i.index + 1 < baseDataj.res * baseDataj.res)
+            if (i.index < baseDataj.res * baseDataj.res)
             {
-                vector.x = baseDataj.posBase + (baseDataj.steps * i.index / baseDataj.res);
-                vector.z = baseDataj.posBase + (baseDataj.steps * i.index % baseDataj.res);
+                vector.x = baseDataj.posBase + (baseDataj.size * (i.index / baseDataj.res));
+                vector.z = baseDataj.posBase + (baseDataj.size * (i.index % baseDataj.res));
                 vector.y = ((math.sin(pi.value * freq.x * (vector.x + time.x)) * magn.x)
                           + (math.sin(pi.value * freq.z * (vector.z + time.z)) * magn.z)) * 0.2f;
                 vector.x += 10f;
@@ -61,10 +56,10 @@ public class JobSystem : JobComponentSystem
 
         public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
-            if (i.index + 1 < baseDataj.res * baseDataj.res)
+            if (i.index < baseDataj.res * baseDataj.res)
             {
-                vector.x = baseDataj.posBase + (baseDataj.steps * i.index / baseDataj.res);
-                vector.z = baseDataj.posBase + (baseDataj.steps * i.index % baseDataj.res);
+                vector.x = baseDataj.posBase + (baseDataj.size * (i.index / baseDataj.res));
+                vector.z = baseDataj.posBase + (baseDataj.size * (i.index % baseDataj.res));
                 s = math.sqrt((vector.x * vector.x) + (vector.z * vector.z));
                 vector.y = ((math.sin(pi.value * ((freq.x * s) - time.x)) / (1f + (magn.x * 10f * s)))
                           + (math.sin(pi.value * ((freq.z * s) - time.z)) / (1f + (magn.z * 10f * s)))) * 0.2f;
@@ -96,10 +91,10 @@ public class JobSystem : JobComponentSystem
 
         public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
-            if (i.index + 1 < baseDataj.res * baseDataj.res)
+            if (i.index < baseDataj.res * baseDataj.res)
             {
-                v = ((i.index % baseDataj.res + 0.5f) * baseDataj.steps) - 1f;
-                u = ((i.index / baseDataj.res + 0.5f) * baseDataj.steps) - 1f;
+                v = (((i.index % baseDataj.res) + 0.5f) * baseDataj.size) - 1f;
+                u = (((i.index / baseDataj.res) + 0.5f) * baseDataj.size) - 1f;
                 r = magn.x + (math.sin(pi.value * ((math.floor(freq.x * 3f) * u) + (v * freq.z) + time.x)) * 0.2f);
                 vector.x = (math.sin(pi.value * u) * r) + 10f;
                 vector.y = math.sin(pi.value * 0.5f * v) * 0.5f * magn.z;
@@ -132,10 +127,10 @@ public class JobSystem : JobComponentSystem
 
         public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
-            if (i.index + 1 < baseDataj.res * baseDataj.res)
+            if (i.index < baseDataj.res * baseDataj.res)
             {
-                v = ((i.index % baseDataj.res + 0.5f) * baseDataj.steps) - 1f;
-                u = ((i.index / baseDataj.res + 0.5f) * baseDataj.steps) - 1f;
+                v = (((i.index % baseDataj.res) + 0.5f) * baseDataj.size) - 1f;
+                u = (((i.index / baseDataj.res) + 0.5f) * baseDataj.size) - 1f;
                 r = magn.x + (math.sin(pi.value * ((math.floor(freq.z * 3f) * v) + time.z)) * 0.1f)
                            + (math.sin(pi.value * ((math.floor(freq.x * 3f) * u) + time.x)) * 0.1f);
                 s = math.cos(pi.value * 0.5f * v) * r;
@@ -170,10 +165,10 @@ public class JobSystem : JobComponentSystem
 
         public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
-            if (i.index + 1 < baseDataj.res * baseDataj.res)
+            if (i.index < baseDataj.res * baseDataj.res)
             {
-                v = ((i.index % baseDataj.res + 0.5f) * baseDataj.steps) - 1f;
-                u = ((i.index / baseDataj.res + 0.5f) * baseDataj.steps) - 1f;
+                v = (((i.index % baseDataj.res) + 0.5f) * baseDataj.size) - 1f;
+                u = (((i.index / baseDataj.res) + 0.5f) * baseDataj.size) - 1f;
                 r = 0.2f + (math.sin(pi.value * ((math.floor(freq.z * 3f) * v) + time.z)) * 0.05f);
                 s = (r * math.cos(pi.value * v)) + (magn.x + (math.sin(pi.value * ((math.floor(freq.x * 3f) * u) + time.x)) * 0.1f));
                 vector.x = (math.sin(pi.value * u) * s) + 10f;
@@ -197,7 +192,7 @@ public class JobSystem : JobComponentSystem
         public void Execute(ref Translation pos, [ReadOnly] ref Index i, ref NonUniformScale scale)
         {
             pos.Value = vector;
-            scale.Value = scalej; 
+            scale.Value = scalej;
         }
     }
 
@@ -224,7 +219,7 @@ public class JobSystem : JobComponentSystem
                     magn = GameObj.magn,
                     time = GameObj.time,
                     pi = GameObj.pi,
-                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.steps,
+                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.size,
                     vector = float3.zero
                 };
                 jobHandle = waveMode.Schedule(this, inputDeps);
@@ -238,7 +233,7 @@ public class JobSystem : JobComponentSystem
                     magn = GameObj.magn,
                     time = GameObj.time,
                     pi = GameObj.pi,
-                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.steps,
+                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.size,
                     vector = float3.zero
                 };
                 jobHandle = rippleMode.Schedule(this, inputDeps);
@@ -252,7 +247,7 @@ public class JobSystem : JobComponentSystem
                     magn = GameObj.magn,
                     time = GameObj.time,
                     pi = GameObj.pi,
-                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.steps,
+                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.size,
                     vector = float3.zero
                 };
                 jobHandle = cylinderMode.Schedule(this, inputDeps);
@@ -266,7 +261,7 @@ public class JobSystem : JobComponentSystem
                     magn = GameObj.magn,
                     time = GameObj.time,
                     pi = GameObj.pi,
-                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.steps,
+                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.size,
                     vector = float3.zero
                 };
                 jobHandle = sphearMode.Schedule(this, inputDeps);
@@ -280,14 +275,15 @@ public class JobSystem : JobComponentSystem
                     magn = GameObj.magn,
                     time = GameObj.time,
                     pi = GameObj.pi,
-                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.steps,
+                    scalej = new float3(1f, 1f, 1f) * GameObj.baseData.size,
                     vector = float3.zero
                 };
                 jobHandle = torusMode.Schedule(this, inputDeps);
                 break;
 
             default:
-                defaultMode = new DefaultMode {
+                defaultMode = new DefaultMode
+                {
                     scalej = new float3(1f, 1f, 1f),
                     vector = float3.zero
                 };

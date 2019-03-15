@@ -46,10 +46,10 @@ public class GameObj : MonoBehaviour
         "80", "81", "82", "83", "84", "85", "86", "87", "88", "89",
         "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
     };
-    private byte fpscount;
-    private byte fpsAvg;
-    private half fpsSum;
-    private bool fpsClock;
+    private byte fpscount = 0;
+    private float fpsAvg = 0;
+    private float fpsSum = 0;
+    private bool fpsClock = true;
 
 
 
@@ -66,7 +66,7 @@ public class GameObj : MonoBehaviour
     private void UIinit()
     {
         //setting up default Slider value
-        ResRange = 50;
+        ResRange = 10;
         TimeXMulti = 1f;
         TimeZMulti = 1f;
         FreqXSine = 1f;
@@ -81,26 +81,30 @@ public class GameObj : MonoBehaviour
 
     private void Update()
     {
+        PreLoopCalc();
+
         fpscount++;
-        fpsSum += math.half(1f / Time.unscaledDeltaTime);
-        if (math.floor(Time.time) % 2 == 0 && fpsClock) //possible break on math.ceil()
+        fpsSum += 1f / Time.unscaledDeltaTime;
+        if ((int)Time.time % 2 != 0 && fpsClock)
         {
-            fpsClock = false;
-            fpsAvg = (byte)math.clamp(fpsSum / fpscount, 0, 99);
+            fpsClock = false;   
+            fpsAvg = fpsSum / fpscount;
             fpscount = 0;
-            fpsSum = math.half(0f);
+            fpsSum = 0f;
         }
-        else if (Time.time % 2 != 0 && !fpsClock)
+        else if ((int)Time.time % 2 == 0 && !fpsClock)
         {
             fpsClock = true;
+            fpsAvg = fpsSum / fpscount;
+            fpscount = 0;
+            fpsSum = 0f;
         }
     }
 
     //Call updating fuctions
     private void LateUpdate()
     {
-        PreLoopCalc();
-        if (fpsAvg < 5)
+        if (fpsAvg < 5 && !fpsClock)
         {
             ResRange = 10;
             Debug.Log("fallback resoution");
@@ -112,11 +116,11 @@ public class GameObj : MonoBehaviour
     private void PreLoopCalc()
     {
         baseData.mode = (byte)Mode;                 //set mode about how to draw graph
-        baseData.res = (byte)math.clamp(ResRange, 10, 200);      //set resolution
-        baseData.steps = 2f / baseData.res;                     //helps in calculating postion and scalling of all items based on resolution
-        baseData.posBase = (0.5f * baseData.steps) - 1f;        //helps in calculating postion of each item
-        time.x = math.half(TimeXMulti * Time.time);    //Sine wave Speed on X axis
-        time.z = math.half(TimeZMulti * Time.time);    //Sine wave Speed on Z axis
+        baseData.res = (byte)math.clamp(ResRange, 10, 100);      //set resolution
+        baseData.size = 2f / baseData.res;                     //helps in calculating postion and scalling of all items based on resolution
+        baseData.posBase = (0.5f * baseData.size) - 1f;        //helps in calculating postion of each item
+        time.x = TimeXMulti * Time.time;    //Sine wave Speed on X axis
+        time.z = TimeZMulti * Time.time;    //Sine wave Speed on Z axis
         freq.x = math.half(FreqXSine);                   //Sine wave Frequency on X axis
         freq.z = math.half(FreqZSine);                   //Sine wave Frequency on Z axis
         magn.x = math.half(MagXSine);                    //Sine wave Magnitude on X axix
@@ -133,7 +137,7 @@ public class GameObj : MonoBehaviour
         texts[4].text = magn.z.ToString();
         texts[5].text = TimeXMulti.ToString("N2");
         texts[6].text = TimeZMulti.ToString("N2");
-        texts[7].text = stringsFrom00To99[fpsAvg];
+        texts[7].text = stringsFrom00To99[math.clamp((int)fpsAvg, 0, 99)];
     }
 
 

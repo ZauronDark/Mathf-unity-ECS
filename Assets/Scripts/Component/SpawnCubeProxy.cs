@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-
+[RequiresEntityConversion]
 public class SpawnCubeProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
     public GameObject Prefab;
@@ -27,6 +26,7 @@ public class SpawnCubeProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvert
             Prefab = conversionSystem.GetPrimaryEntity(Prefab),
             CountX = CountX,
             CountY = CountY
+
         };
         dstManager.AddComponentData(entity, spawnCubeData);
     }

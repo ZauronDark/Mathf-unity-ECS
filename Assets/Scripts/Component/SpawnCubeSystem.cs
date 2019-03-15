@@ -21,23 +21,23 @@ public class SpawnCubeSystem : JobComponentSystem
     }
 
     [BurstCompile]
-    struct SpawnJob : IJobProcessComponentDataWithEntity<SpawnCube, LocalToWorld>
+    struct SpawnJob : IJobProcessComponentDataWithEntity<SpawnCube>
     {
         public EntityCommandBuffer CommandBuffer;
+        private int a;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref SpawnCube spawner, [ReadOnly] ref LocalToWorld location)
+        public void Execute(Entity entity, int index, [ReadOnly] ref SpawnCube spawner)
         {
-            for (int x = 0; x < spawner.CountX; x++)
+            a = spawner.CountX * spawner.CountY;
+            for (int i = 0; i < a; i++)
             {
-                for (int y = 0; y < spawner.CountY; y++)
-                {
-                    Entity instance = CommandBuffer.Instantiate(spawner.Prefab);
+                Entity instance = CommandBuffer.Instantiate(spawner.Prefab);
+                
+                CommandBuffer.SetComponent(instance, new Translation { Value = new float3(0f,0f,0f) });
+                CommandBuffer.AddComponent(instance, new Index { index = i });
+                CommandBuffer.SetComponent(instance, new NonUniformScale { Value = new float3(1f, 1f, 1f) });
 
-                    // Place the instantiated in a grid with some noise
-                    float3 position = math.transform(location.Value, new float3(x * 1.3F, noise.cnoise(new float2(x, y) * 0.21F) * 2, y * 1.3F));
-                    CommandBuffer.SetComponent(instance, new Translation { Value = position });
-                }
-            }
+            } 
 
             CommandBuffer.DestroyEntity(entity);
         }
