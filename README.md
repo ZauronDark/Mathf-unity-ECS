@@ -8,16 +8,6 @@ It's just me learning new Entity Component System in Unity Game Engine with usin
 
 This project is nothing but just a bunch of Cubes Spawned and Positioned using basic Trigonometry's Sin() and Cos() Functions to make Shapes such as Wave grid, Ripple grid, Cylinder, Sphere and Torus. However, you can learn ECS behind the scene such as the simplest way to spawn Entity from GameObject prefab, Creating/Adding Components and the most fun part is Working with C# Jobs to make systems that run across CPU cores. Feel free to Learn, Clone, Modify, Publish, Sell this project as you wish but on your own RISK.
 
-#### known issues:
-
-- On my android device with 10 resolution FPS drops, but with 50 resolution improve FPS....... :tableFlip:
-- Entities won't destroy on resolution decrease (not a bug, it's just me being lazy), they just move out of the viewport if not in use, - which is the cause for the above issue.
-- GUI you see are all ugly Gameobjects :eww!! yucks:
-- And also yeah GUI is hard to select and use.
-- Size of builds are large due to disabled Stripping unused systems, upon enabling ECS won't run.
-- Currently, using Mono to compile builds, IL2CPP compilation crashes for some unknown reason.
-
-note: i did bugreport and waiting for its response, i'll update soon
 
 #### History of Project (dont read)
 
