@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: LWRPAsset
   m_EditorClassIdentifier: 
   k_AssetVersion: 4
-  m_RendererType: 0
-  m_RendererData: {fileID: 11400000, guid: 3c95e5ea1b6b0754eaf24d3f643258cd, type: 2}
+  m_RendererType: 1
+  m_RendererData: {fileID: 11400000, guid: 618d298269e66c542b306de85db1faea, type: 2}
   m_RequireDepthTexture: 0
   m_RequireOpaqueTexture: 0
-  m_OpaqueDownsampling: 0
+  m_OpaqueDownsampling: 1
   m_SupportsHDR: 0
   m_MSAA: 1
   m_RenderScale: 1
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_ShadowNormalBias: 1
   m_SoftShadowsSupported: 0
   m_UseSRPBatcher: 1
-  m_SupportsDynamicBatching: 1
+  m_SupportsDynamicBatching: 0
   m_MixedLightingSupported: 0
   m_ShadowType: 1
   m_LocalShadowsSupported: 0

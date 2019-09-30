@@ -1,31 +1,32 @@
 ﻿
-public struct BaseData
+namespace MathfECS
 {
-    public byte mode;
-    public byte res;
-    public float posBase;
-    public float size;
-}
+    public struct BaseData
+    {
+        public int mode;
+        public int res;
+    }
+    public struct TransformData
+    {
+        public float posBase;
+        public float size;
+    }
 
-public struct PI
-{
-    public float value;
-}
+    public struct TimeSin
+    {
+        public float x;
+        public float z;
+    }
 
-public struct TimeSin
-{
-    public float x;
-    public float z;
-}
+    public struct FreqSin
+    {
+        public float x;
+        public float z;
+    }
 
-public struct FreqSin
-{
-    public float x;
-    public float z;
-}
-
-public struct MagnSin
-{
-    public float x;
-    public float z;
+    public struct MagnSin
+    {
+        public float x;
+        public float z;
+    }
 }

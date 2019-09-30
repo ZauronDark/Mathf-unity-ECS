@@ -43,6 +43,7 @@ QualitySettings:
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 0
+    BJM: 0
     Lumin: 0
     Nintendo Switch: 0
     PS4: 0

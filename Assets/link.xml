@@ -1,0 +1,18 @@
+<linker>
+  <assembly fullname="Unity.Collections" preserve="all" />
+<assembly fullname="Unity.Collections.Experimental" preserve="all" />
+<assembly fullname="Unity.Collections.LowLevel" preserve="all" />
+<assembly fullname="Unity.Entities" preserve="all" />
+<assembly fullname="Unity.Entities.BuildUtils" preserve="all" />
+<assembly fullname="Unity.Entities.Editor" preserve="all" />
+<assembly fullname="Unity.Entities.Serialization" preserve="all" />
+<assembly fullname="Unity.Entities.Streaming" preserve="all" />
+<assembly fullname="Unity.Transforms" preserve="all" />
+<assembly fullname="Unity.Jobs" preserve="all" />
+<assembly fullname="Unity.Jobs.LowLevel" preserve="all" />
+<assembly fullname="Unity.Rendering" preserve="all" />
+<assembly fullname="Unity.Mathematics" preserve="all" />
+<assembly fullname="Unity.Properties" preserve="all" />
+<assembly fullname="Unity.Properties.Reflection" preserve="all" />
+<assembly fullname="Unity.Burst" preserve="all" />
+</linker>

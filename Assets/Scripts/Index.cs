@@ -1,8 +1,9 @@
-﻿using System;
-using Unity.Entities;
+﻿using Unity.Entities;
 
-[Serializable]
-public struct Index : IComponentData
+namespace MathfECS
 {
-    public int index;
+    public struct Index : IComponentData
+    {
+        public int index;
+    }
 }
